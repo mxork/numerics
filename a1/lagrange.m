@@ -47,40 +47,35 @@ function C = cheb_nodes(N)
 	C = arrayfun(@(i) chebyshev(i, N), 1:N);
 end
 
-% question 2
+function [G, Exact, Apprx, Error] = test_lagrange(H, N, f)
+	% G is the test grid
+	G = linspace(-H, H, 20*N);
+	X = linspace(-H, H, N);
 
-%test grid
-G = linspace(-1,1,1000);
-Exact = sign(G);
-Ns = [2, 7, 16];
-Hs = arrayfun(@(x) 10^(-x), 1:4);
+	Exact = f(G);
 
-Xapprx = zeros(length(Ns), length(G) );
-Xerror = zeros(length(Ns), length(Hs));
+	A = div_diff(X, @(x) f(x));
+	Apprx = arrayfun( @(x) div_diff_interp(A, X, x), G);
 
-Capprx = zeros(length(Ns), length(G) );
-Cerror = zeros(1, length(Ns)); 
-
-for iN = 1:length(Ns)
-	for iH = 1:length(Hs)
-		N = Ns(iN);
-	   	H = Hs(iH);
-
-		X = linspace(-H, H, N);
-
-		A = div_diff(X, @(x) sign(x));
-		Xapprx(iN, :) = arrayfun( @(x) div_diff_interp(A, X, x), G);
-
-		errors = arrayfun( @(x,y) abs(x-y), Exact, Xapprx(iN, :));
-		Xerror(iN, iH) = max(errors)
-	end
-
-	% C = cheb_nodes(N)
-	%	A = div_diff(C, @(x) sign(x));
-	%	Capprx(iN, :) = arrayfun( @(x) div_diff_interp(A, C, x), G);
-	%	errors = arrayfun( @(x,y) abs(x-y), Exact, Capprx);
-	%	Cerror(iN) = max(errors)
+	errors = arrayfun( @(x,y) abs(x-y), Exact, Apprx);
+	Error = max(errors);
 end
 
-loglog(Hs, Xerror(2, :))
+% question 2
+no_pow = 8;
+degs = [2, 7, 16];
+hs = arrayfun( @(x) 10^(-x), 1:no_pow);
+errors = zeros(3,no_pow);
+
+for j = 1:3
+	for i = 1:no_pow
+		h = hs(i);
+		deg = degs(j);
+		[~, ~, ~, errors(j, i)] = test_lagrange(h*100*pi, deg, @(x) sin(x));
+	end	
+end
+
+errors
+loglog(hs, errors)
 uiwait()
+
