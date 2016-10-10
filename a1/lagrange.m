@@ -62,12 +62,12 @@ function [G, Exact, Apprx, Error] = test_lagrange(H, N, f)
 end
 
 % question 2
-no_pow = 8;
-degs = [2, 7, 16];
+no_pow = 2;
+degs = [2, 7];
 hs = arrayfun( @(x) 10^(-x), 1:no_pow);
 errors = zeros(3,no_pow);
 
-for j = 1:3
+for j = 1:length(degs)
 	for i = 1:no_pow
 		h = hs(i);
 		deg = degs(j);
@@ -75,7 +75,8 @@ for j = 1:3
 	end	
 end
 
-errors
+errors;
+hold on;
 loglog(hs, errors)
-uiwait()
+print -dpng errors.png
 
