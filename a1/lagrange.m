@@ -22,6 +22,8 @@ function A = div_diff(X, func)
 end
 
 % this is probably not the write way to code a polynomial
+% estimate the value f(x) using the divided difference matrix A,
+% and the sample points X=(x1 ... xn)
 function ans = div_diff_interp(A, X, x)
 	ans = 0;
 	N = length(A);
@@ -47,9 +49,18 @@ function C = cheb_nodes(N)
 	C = arrayfun(@(i) chebyshev(i, N), 1:N);
 end
 
+% over the interval (-H, H) with N evenly spaced points, test
+% Lagrange interpolation for the function f.
+% Returns 
+%	G: the test mesh (for plotting), 
+%	Exact: precise values of f evaluated for each xi in G, 
+%	Apprx: lagrange interpolation for each xi in G, and
+%   Error: max error over the interval.
 function [G, Exact, Apprx, Error] = test_lagrange(H, N, f)
-	% G is the test grid
+	% G is the test grid; 20 times as fine as sample grid
 	G = linspace(-H, H, 20*N);
+
+	% X is the sampling grid
 	X = linspace(-H, H, N);
 
 	Exact = f(G);
@@ -62,21 +73,23 @@ function [G, Exact, Apprx, Error] = test_lagrange(H, N, f)
 end
 
 % question 2
-no_pow = 2;
-degs = [2, 7];
+no_pow = 6;
+degs = [2, 7, 16];
 hs = arrayfun( @(x) 10^(-x), 1:no_pow);
-errors = zeros(3,no_pow);
+fs = {@(x) sign(x), @(x) sin(x), @(x) abs(x), @(x) x^5}
+names = {"sign", "sin", "abs", "quintic"}
+errors = zeros(length(degs),no_pow);
 
-for j = 1:length(degs)
-	for i = 1:no_pow
-		h = hs(i);
-		deg = degs(j);
-		[~, ~, ~, errors(j, i)] = test_lagrange(h*100*pi, deg, @(x) sin(x));
-	end	
+for k = 1:length(fs)
+	for j = 1:length(degs)
+		for i = 1:no_pow
+			h = hs(i);
+			deg = degs(j);
+			[~, ~, ~, errors(j, i)] = test_lagrange(h*100*pi, deg, fs{k} );
+			errors
+			loglog(hs, errors)
+			print([names{k}, ".png"], "-dpng")
+		end	
+	end
 end
-
-errors;
-hold on;
-loglog(hs, errors)
-print -dpng errors.png
 
