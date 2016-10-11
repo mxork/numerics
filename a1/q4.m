@@ -8,12 +8,12 @@ function unused = q4()
 	};
 
 	funcnames = {
-		"sign",
-		"sin",
-		"abs",
-		"quintic",
-		"cauchy"
-	}
+		'sign',
+		'sin',
+		'abs',
+		'quintic',
+		'cauchy'
+	};
 
 	intmethods = {
 		'nearest',
@@ -23,17 +23,17 @@ function unused = q4()
 		'cubic'
 	};
 
-	N = arrayfun(@(x) 2.^x, 2:8)
+	N = arrayfun(@(x) 2.^x, 1:14)
 	H = arrayfun(@(x) 2./x, N)
 
 	for fi = 1:length(funcs)
-		G = linspace(-1, 1, 10000);
+		G = linspace(-1, 1, 100000);
 		Exact = funcs{fi}(G);
 		Errors = zeros(length(intmethods), length(H));
 
 		for mi = 1:length(intmethods)
 			for ni = 1:length(N)
-				X = linspace(-1, 1, N);
+				X = linspace(-1, 1, N(ni));
 				Sampled = funcs{fi}(X);
 				Apprx = interp1(X, Sampled, G, intmethods{mi});
 
@@ -43,9 +43,13 @@ function unused = q4()
 		end
 
 		funcnames{fi}
-		Errors
+		for mi = 1:length(intmethods)
+			intmethods{mi}
+			polyfit(log(H), log(Errors(mi,:)), 1)(1)
+		end
+
 		loglog(H, Errors);
-		print(["q4plots/", funcnames{fi}, ".png"] , "-dpng");
+		print(['q4plots/', funcnames{fi}, '.png'] , '-dpng');
 	end
 end
 
