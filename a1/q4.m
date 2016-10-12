@@ -23,8 +23,8 @@ function unused = q4()
 		'cubic'
 	};
 
-	N = arrayfun(@(x) 2.^x, 1:14)
-	H = arrayfun(@(x) 2./x, N)
+	N = arrayfun(@(x) 2.^x, 1:14);
+	H = arrayfun(@(x) 2./x, N);
 
 	for fi = 1:length(funcs)
 		G = linspace(-1, 1, 100000);
@@ -42,10 +42,10 @@ function unused = q4()
 			end
 		end
 
-		funcnames{fi}
+		func = funcnames{fi}
 		for mi = 1:length(intmethods)
-			intmethods{mi}
-			polyfit(log(H), log(Errors(mi,:)), 1)(1)
+			method = intmethods{mi}
+			slope = polyfit(log(H), log(Errors(mi,:)), 1)(1)
 		end
 
 		loglog(H, Errors);

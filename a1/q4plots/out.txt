@@ -14,41 +14,17 @@ For more information, visit http://www.octave.org/get-involved.html
 Read http://www.octave.org/bugs.html to learn how to submit bug reports.
 For information about changes from previous versions, type 'news'.
 
-N =
-
- Columns 1 through 10:
-
-       2       4       8      16      32      64     128     256     512    1024
-
- Columns 11 through 14:
-
-    2048    4096    8192   16384
-
-H =
-
- Columns 1 through 6:
-
-   1.0000e+00   5.0000e-01   2.5000e-01   1.2500e-01   6.2500e-02   3.1250e-02
-
- Columns 7 through 12:
-
-   1.5625e-02   7.8125e-03   3.9062e-03   1.9531e-03   9.7656e-04   4.8828e-04
-
- Columns 13 and 14:
-
-   2.4414e-04   1.2207e-04
-
-ans = sign
-ans = nearest
-ans = NaN
-ans = linear
-ans =  0.012206
-ans = spline
-ans =  0.014586
-ans = pchip
-ans =  0.018865
-ans = cubic
-ans =  0.018865
+func = sign
+method = nearest
+slope = NaN
+method = linear
+slope =  0.012206
+method = spline
+slope =  0.014586
+method = pchip
+slope =  0.018865
+method = cubic
+slope =  0.018865
 +-----------------------------------------------------------------------------+
 |  0                                                                          |
 |10 ++---+--+--++-+++++----+--+-+-+-++++-----+--+-+-++-+++-----+--+-+-++++++  |
@@ -73,17 +49,17 @@ ans =  0.018865
 |   +-4-----------------3----------------2-----------------1--------------++0 |
 |  10                10               10                10                10  |
 +-----------------------------------------------------------------------------+
-ans = sin
-ans = nearest
-ans =  1.0366
-ans = linear
-ans =  1.9932
-ans = spline
-ans =  3.9070
-ans = pchip
-ans =  3.0194
-ans = cubic
-ans =  3.0194
+func = sin
+method = nearest
+slope =  1.0366
+method = linear
+slope =  1.9932
+method = spline
+slope =  3.9070
+method = pchip
+slope =  3.0194
+method = cubic
+slope =  3.0194
 +-----------------------------------------------------------------------------+
 |    0                                                                        |
 |  10 ++---+--+-+-++-+++----+--+--++-++++-----+--+-+-++++++----+--+-+-++++++  |
@@ -108,17 +84,17 @@ ans =  3.0194
 |10   +-4----------------3----------------2-----------------1-------------++0 |
 |    10               10               10                10               10  |
 +-----------------------------------------------------------------------------+
-ans = abs
-ans = nearest
-ans =  1.0445
-ans = linear
-ans =  1.0567
-ans = spline
-ans =  1.0812
-ans = pchip
-ans =  1.0567
-ans = cubic
-ans =  1.0567
+func = abs
+method = nearest
+slope =  1.0445
+method = linear
+slope =  1.0567
+method = spline
+slope =  1.0812
+method = pchip
+slope =  1.0567
+method = cubic
+slope =  1.0567
 +-----------------------------------------------------------------------------+
 |   0                                                                         |
 | 10 ++---+--+--++-++++-----+--+-+-++++++----+--+--++-++++-----+--+-+-++++++  |
@@ -143,17 +119,17 @@ ans =  1.0567
 |10  +-4----------------3-----------------2----------------1--------------++0 |
 |   10               10                10               10                10  |
 +-----------------------------------------------------------------------------+
-ans = quintic
-ans = nearest
-ans =  0.94455
-ans = linear
-ans =  1.9127
-ans = spline
-ans =  3.9146
-ans = pchip
-ans =  2.9338
-ans = cubic
-ans =  2.9338
+func = quintic
+method = nearest
+slope =  0.94455
+method = linear
+slope =  1.9127
+method = spline
+slope =  3.9146
+method = pchip
+slope =  2.9338
+method = cubic
+slope =  2.9338
 +-----------------------------------------------------------------------------+
 |    0                                                                        |
 |  10 ++---+--+-+-++-+++----+--+--++-++++-----+--+-+-++++++----+--+-+-++++++  |
@@ -178,17 +154,17 @@ ans =  2.9338
 |10   +-4----------------3----------------2-----------------1-------------++0 |
 |    10               10               10                10               10  |
 +-----------------------------------------------------------------------------+
-ans = cauchy
-ans = nearest
-ans =  0.97095
-ans = linear
-ans =  1.8937
-ans = spline
-ans =  3.8578
-ans = pchip
-ans =  1.8951
-ans = cubic
-ans =  1.8951
+func = cauchy
+method = nearest
+slope =  0.97095
+method = linear
+slope =  1.8937
+method = spline
+slope =  3.8578
+method = pchip
+slope =  1.8951
+method = cubic
+slope =  1.8951
 +-----------------------------------------------------------------------------+
 |    0                                                                        |
 |  10 ++---+--+-+-++-+++----+--+--++-++++-----+--+-+-++++++----+--+-+-++++++  |
