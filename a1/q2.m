@@ -1,10 +1,10 @@
 % question 2 wrapper
 function ans = q2() 
-	no_pow = 6;
+	no_pow = 16;
 	degs = [2, 7, 16];
-	hs = arrayfun( @(x) 10^(-x), 1:no_pow);
+	hs = arrayfun( @(x) (4/3)^(-x), 1:no_pow);
 	fs = {@(x) sign(x), @(x) sin(x), @(x) abs(x), @(x) x.^5};
-	names = {"sign", "sin", "abs", "quintic"};
+	names = {'sign', 'sin', 'abs', 'quintic'};
 
 	for k = 1:length(fs)
 		errors = zeros(length(degs),no_pow);
@@ -12,12 +12,27 @@ function ans = q2()
 			for i = 1:no_pow
 				h = hs(i);
 				deg = degs(j);
-				[~, ~, ~, errors(j, i)] = test_lagrange(h*100*pi, deg, fs{k} );
+				[G, Exact, Apprx, errors(j, i)] = test_lagrange(h*8, deg, fs{k} );
+%				[~, ~, ~, errors(j, i)] = test_lagrange(h*32, deg, fs{k} );
+
+%				if k==3
+%					h=h
+%					deg=deg
+%					name=names{k}
+%					G=G
+%					plot(G, Exact, G, Apprx)
+%					print -dpng /dev/null
+%				end
 			end	
 		end
-		errors;
+
+		name=names{k}
+		for j=1:length(degs)
+			slope = polyfit(log(hs), log(errors(j, :)), 1)(1)
+		end
+		errors = errors
 		loglog(hs, errors)
-		print(["plots/", names{k}, ".png"], "-dpng");
+		print(["q2plots/", names{k}, ".png"], "-dpng");
 	end
 
 	ans = 0

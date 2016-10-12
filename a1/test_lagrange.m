@@ -11,9 +11,9 @@ function [G, Exact, Apprx, Error] = test_lagrange(H, N, f, useChebyshev=false)
 
 	% X is the sampling grid
 	if useChebyshev 
-		X = linspace(-H, H, N);
+		X = linspace(-H, H, N+1); %+1, since n-1 polynomial
 	else
-		X = cheb_nodes(H, N);
+		X = cheb_nodes(H, N+1);
 	end
 
 	Exact = f(G);
@@ -67,14 +67,3 @@ function ans = div_diff_interp(A, X, x)
 end
 
 
-% returns kth zero of the n-degree Chebyshev polynomial
-% over (-1, 1)
-function ans = chebyshev(k, n)
-	ans = cos( (2*k-1) * pi / (2*n) );
-end
-
-% returns the chebyshev nodes over (-H, H)
-function C = cheb_nodes(H, N)
-	C = arrayfun(@(i) chebyshev(i, N), 1:N);
-	C *= H;
-end
