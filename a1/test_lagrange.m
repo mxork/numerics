@@ -25,6 +25,23 @@ function [G, Exact, Apprx, Error] = test_lagrange(H, N, f, useChebyshev=false)
 	Error = max(errors);
 end
 
+% returns the interp polynomial [a_n ... a_0]
+function P = vander_interp_poly(X, func)
+	N = length(X);
+	Y = arrayfun(func, X);
+	A = zeros(N);
+	A(:, 1) = ones(N, 1); 
+
+	for i=1:N
+		for j=2:N
+			A(i,j) = X(i)*A(i, j-1);
+		end
+	end
+
+	Ai = inv(A);
+	P = Ai*Y;
+end
+
 % returns the dividided diff matrix:
 % x0 f(x0)
 % x1 f(x1) [x1, x0]f

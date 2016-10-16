@@ -30,7 +30,7 @@ function ans = q2()
 		for j=1:length(degs)
 			slope = polyfit(log(hs), log(errors(j, :)), 1)(1)
 		end
-		errors = errors
+		errorst = errors'
 		loglog(hs, errors)
 		print(["q2plots/", names{k}, ".png"], "-dpng");
 	end

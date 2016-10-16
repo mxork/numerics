@@ -4,23 +4,30 @@
 
 ## Question 2
 
-	name = sign
-	slope = 0
-	slope =   -9.9777e-17
-	slope = 0
-	errors =
+### TODO
 
-	 Columns 1 through 8:
+- plot
+- table
+	- transposes
+- order
+- discussion
 
-	   1.96952   1.96952   1.96952   1.96952   1.96952   1.96952   1.96952   1.96952
-	   0.95742   0.95742   0.95742   0.95742   0.95742   0.95742   0.95742   0.95742
-	   1.97611   1.97611   1.97611   1.97611   1.97611   1.97611   1.97611   1.97611
+### Signum function
 
-	 Columns 9 through 16:
+For all polynomial degrees, the order of error was constant with respect to h.
+This is reasonable; the discontinuity at 0 affects the $sup$ norm strongly. 
 
-	   1.96952   1.96952   1.96952   1.96952   1.96952   1.96952   1.96952   1.96952
-	   0.95742   0.95742   0.95742   0.95742   0.95742   0.95742   0.95742   0.95742
-	   1.97611   1.97611   1.97611   1.97611   1.97611   1.97611   1.97611   1.97611
+Columns 1 through 8:
+
+1.96952   1.96952   1.96952   1.96952   1.96952   1.96952   1.96952   1.96952
+0.95742   0.95742   0.95742   0.95742   0.95742   0.95742   0.95742   0.95742
+1.97611   1.97611   1.97611   1.97611   1.97611   1.97611   1.97611   1.97611
+
+Columns 9 through 16:
+
+1.96952   1.96952   1.96952   1.96952   1.96952   1.96952   1.96952   1.96952
+0.95742   0.95742   0.95742   0.95742   0.95742   0.95742   0.95742   0.95742
+1.97611   1.97611   1.97611   1.97611   1.97611   1.97611   1.97611   1.97611
 
 	+-----------------------------------------------------------------------------+
 	|   1                                                                         |
@@ -48,6 +55,14 @@
 	+-----------------------------------------------------------------------------+
 
 ![](q2plots/sign.png)
+
+### Sine
+
+The error for sine showed good agreement with the theory, until it reached our 
+effective machine epsilon around $10^{-16}$. The order of the error was about
+$h^3$, $h^9$, and $h^17$ for the degree 2, 7, and 16 polynomial interpolations.
+Note that the degree 16 converged rapidly the machine epsilon, so we needed to 
+toss out many small h-values to obtain the 'true' order of error.
 
 	name = sin
 	slope =  2.7211
@@ -100,6 +115,11 @@
 
 ![](q2plots/sin.png)
 
+### Absolute value
+
+The absolute value had order $h$ convergence for all degrees. This agrees with
+the theory because abs is in $C^0$ but not $C^1$.
+
 	name = abs
 	slope =  1.0000
 	slope =  1.0000
@@ -150,6 +170,10 @@
 	+-----------------------------------------------------------------------------+
 
 ![](q2plots/abs.png)
+
+### Quintic
+
+As far as I can tell, this is garbage.
 
 	name = quintic
 	slope =  5.0000
@@ -203,6 +227,12 @@
 ![](q2plots/quintic.png)
 
 ## Question 3
+
+### TODO
+
+- raw error
+- plots
+- discussion
 
 	chebyORequidist = equidist
 	deg =  2
