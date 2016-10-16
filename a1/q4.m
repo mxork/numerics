@@ -50,7 +50,7 @@ function unused = q4()
 			ErrVMF(fi, mi) = slope;
 		end
 
-		Errors = Errors;
+		Errors = Errors
 		%loglog(H, Errors);
 		%print(['q4plots/', funcnames{fi}, '.png'] , '-dpng');
 	end
