@@ -4,6 +4,8 @@ function unused = q3()
 	chebys = {'equidist', 'cheby'};
 	bools = [false, true];
 
+	errvh = zeros(length(hs), 2);
+
 	for k= 1:length(chebys)
 		for i= 1:length(degs)
 			% error plots
@@ -14,7 +16,10 @@ function unused = q3()
 
 			chebyORequidist = chebys{k}
 			deg = degs(i)
-			errors = errors
+			errvh(:, 1) = hs';
+			errvh(:, 2) = errors';
+			errvh = errvh
+
 			loglog(hs, errors);
 			print(["q3plots/error", num2str( degs(i) ), chebys{k},".png"], "-dpng")
 		end

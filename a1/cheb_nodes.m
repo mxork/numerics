@@ -1,6 +1,6 @@
 % returns the chebyshev nodes over (-H, H)
 function C = cheb_nodes(H, N)
-	C = arrayfun(@(i) chebyshev(i, N), 1:N);
+	C= arrayfun(@(k) chebyshev(k, N), 1:N);
 	C *= H;
 end
 

@@ -25,6 +25,7 @@ function unused = q4()
 
 	N = arrayfun(@(x) 2.^x, 1:14);
 	H = arrayfun(@(x) 2./x, N);
+	ErrVMF = zeros(length(funcs), length(intmethods));
 
 	for fi = 1:length(funcs)
 		G = linspace(-1, 1, 100000);
@@ -46,11 +47,15 @@ function unused = q4()
 		for mi = 1:length(intmethods)
 			method = intmethods{mi}
 			slope = polyfit(log(H), log(Errors(mi,:)), 1)(1)
+			ErrVMF(fi, mi) = slope;
 		end
 
-		loglog(H, Errors);
-		print(['q4plots/', funcnames{fi}, '.png'] , '-dpng');
+		Errors = Errors;
+		%loglog(H, Errors);
+		%print(['q4plots/', funcnames{fi}, '.png'] , '-dpng');
 	end
+
+	ErrVMF = ErrVMF
 end
 
 q4();

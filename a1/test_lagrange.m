@@ -11,21 +11,25 @@ function [G, Exact, Apprx, Error] = test_lagrange(H, N, f, useChebyshev=false)
 
 	% X is the sampling grid
 	if useChebyshev 
-		X = linspace(-H, H, N+1); %+1, since n-1 polynomial
-	else
 		X = cheb_nodes(H, N+1);
+	else
+		X = linspace(-H, H, N+1); %+1, since n-1 polynomial
 	end
 
 	Exact = f(G);
 
-	A = div_diff(X, @(x) f(x));
-	Apprx = arrayfun( @(x) div_diff_interp(A, X, x), G);
+	P = vander_interp_poly(X, f);
+	Apprx = polyval(P, G);
 
 	errors = arrayfun( @(x,y) abs(x-y), Exact, Apprx);
 	Error = max(errors);
 end
 
 % returns the interp polynomial [a_n ... a_0]
+% the divided diff matrix is faster to crunch, but
+% it doesn't return the coefficients in a nice, easy
+% to evaluate way. Hence, we trade some up front cost
+% for quicker evaluation, and the better behaviour of polyval
 function P = vander_interp_poly(X, func)
 	N = length(X);
 	Y = arrayfun(func, X);
@@ -38,8 +42,11 @@ function P = vander_interp_poly(X, func)
 		end
 	end
 
-	Ai = inv(A);
-	P = Ai*Y;
+	[L, U] = lu(A);
+
+	%Ai = inv(A);
+	P = U\(L\Y');
+	P = fliplr(P');
 end
 
 % returns the dividided diff matrix:

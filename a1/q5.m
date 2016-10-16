@@ -28,6 +28,7 @@ function unused = q51()
 	print -dpng q5plots/chebyshevVShermite.png
 end
 
+% takes Y1= f(x_i), Y2=f'(x_i), Xq= query points
 function Yq = herminterp(Y1, Y2, Xq)
 	N = length(Y1);
 
@@ -57,23 +58,26 @@ function Yq = herminterp(Y1, Y2, Xq)
 		end
 	end	
 
-	Ai = inv(A);
+	% apparently, never use inv
+	%Ai = inv(A);
+	[L,U] = lu(A);
+
 	% right side is +ve, left side is -ve
 	Y3 = [Y2, Y1];
 
-	Yq = arrayfun(@(x) EvalHermMatrix(Ai, Y3, x), Xq);
+	Yq = arrayfun(@(x) EvalHermMatrix(L, U, Y3, x), Xq);
 end
 
-function ans = EvalHermMatrix(Ai, Y3, xq)
+function ans = EvalHermMatrix(L, U, Y3, xq)
 	ans = 0;
 	N = length(Y3)/2;
 
 	for i = 1:2*N
-		ans += Y3(i)*polyval( Ai*(eye(2*N)(:, i) ), xq); 
+		ans += Y3(i)*polyval( U\( L\(eye(2*N)(:, i) )), xq); 
 	end
 end
 
-degs = [5,7,9,11]
+degs = [5,7,9,11,16]
 for di = 1:length(degs)
 	deg = degs(di)+1
 
@@ -83,6 +87,8 @@ for di = 1:length(degs)
 	R(1) = 1;
 
 	Apprx = herminterp(L, R, G);
+	Error = max(abs(Exact-Apprx))
+	ErrorC
 	plot(G, Exact, G, Apprx, G, ApprxC)
 	print(["q5plots/chebyshevVShermite", num2str(deg-1), ".png"] , "-dpng");
 end
