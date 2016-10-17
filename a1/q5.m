@@ -77,9 +77,9 @@ function ans = EvalHermMatrix(L, U, Y3, xq)
 	end
 end
 
-degs = [5,7,9,11,16]
+degs = [3,5,7,9,11]
 for di = 1:length(degs)
-	deg = degs(di)+1
+	deg = degs(di)
 
 	[G, Exact, ApprxC, ErrorC] = test_lagrange(1, deg, @(x) sign(x), true);
 	L = R =zeros(1, deg); 
@@ -89,6 +89,7 @@ for di = 1:length(degs)
 	Apprx = herminterp(L, R, G);
 	Error = max(abs(Exact-Apprx))
 	ErrorC
-	plot(G, Exact, G, Apprx, G, ApprxC)
-	print(["q5plots/chebyshevVShermite", num2str(deg-1), ".png"] , "-dpng");
+	graphplot(["q5plots/chebyshevVShermite", num2str(deg), ".png"],
+		G, [Exact; Apprx; ApprxC],
+		{'exact', 'Hermite', 'Chebyshev'});
 end

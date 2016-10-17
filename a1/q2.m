@@ -34,12 +34,11 @@ function ans = q2()
 		errvh(:, 1) = hs';
 		errvh(:, 2:(length(degs)+1)) = errors'
 
-
-		loglog(hs, errors)
-		print(["q2plots/", names{k}, ".png"], "-dpng");
+		errorplot(
+			["q2plots/", names{k}, ".png"], hs, errors, 
+			arrayfun(@(deg) ['n=', num2str(deg)], degs, 'UniformOutput', false)
+			);
 	end
-
-	ans = 0
 end
 
 q2();

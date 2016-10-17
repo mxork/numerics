@@ -22,29 +22,18 @@ function unused = q3()
 		errvh(:, 1) = hs';
 		errvh = errvh
 		errvht = errvh';
-		loglog(
-			errvht(1,:), errvht(2,:),
-			errvht(1,:), errvht(3,:),
-			errvht(1,:), errvht(4,:),
-			errvht(1,:), errvht(5,:)
-			);
-
 		%legend("n=2", "n=7", "n=16", "n=100");
-		print(["q3plots/error", chebys{k},".png"], "-dpng")
+		errorplot(["q3plots/error", chebys{k},".png"], errvht(1,:), errvht(2:length(errvht(:,1)), :),
+			arrayfun(@(deg) ['n=', num2str(deg)], degs, 'UniformOutput', false));
 	end
 
 
 	% u(x) vs. p(x) plot for n=100
 	[G, Exact, Apprx, ~] = test_lagrange(1, 100, @(x) cauchy(x), false);
-	plot(G, Exact, G, Apprx)
-	title "Equidistant"
-	print("q3plots/plotequi.png", "-dpng", "-S600,400")
+	graphplot("q3plots/plotequi.png", G, [Exact; Apprx], {'exact', 'apprx'})
 
 	[~, ~, ApprxC, ~] = test_lagrange(1, 100, @(x) cauchy(x), true);
-	plot(G, Exact, G, ApprxC)
-	title "Chebyshev"
-	print("q3plots/plotcheby.png", "-dpng")
-
+	graphplot("q3plots/plotcheby.png", G, [Exact; ApprxC], {'exact', 'apprx'})
 end
 
 function ans = cauchy(x)
