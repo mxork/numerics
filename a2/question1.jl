@@ -63,6 +63,7 @@ function q11error(Δx,Δt,θ)
     return maximum( abs(Ans - Ex) )
 end
 
+# weird scheme for advection
 function question12()
 
 end
