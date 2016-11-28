@@ -56,23 +56,92 @@ We wind up with $\theta=\frac{1}{2}$, and $\Delta t = (\Delta x)^2$
 
 ### Question 1.1.4
 
-Mess around with solutions of the form u=sincos TODO
+Let $f(x,t) = \sin{x}$. <!--TODO is contant wrt t a cop out? --> Then, taking
+the Fourier series of both sides gets us:
+
+<!-- TODO double check exact solution -->
+\begin{align*}
+d_t\hat{u}_n &= -n^2\hat{u}_n + \mathbb{1}_{n=1} \\
+d_t\hat{u}_n &= -n^2\hat{u}_n + \mathbb{1}_{n=1} 
+\end{align*}
+
+So, assuming that $u_0 = 0$, we run the scheme to $t=1$. We wind up with a plot
+of our "efficiency surface", (efficiency $= (CE)^{-1}$ ).
 
 ## Question 1.2
 
-**1** get D again
+### Question 1.2.1
 
-**2** Hideously ugly LTE.
+We need fourth derivative, so we need at least five points. Since
+we are taking a centered difference, we pick up second-order at no
+extra cost. Solve:
 
-**3** Even uglier stability. 
+\begin{align*}
+ \begin{pmatrix}
+   1 & 1 & 1 & 1 & 1  \\
+   -2h & -h & 0 & h & 2h  \\
+   -2h^2 & -h^2 & 0 & h^2 & 2h^2  \\
+   -2h^3 & -h^3 & 0 & h^3 & 2h^3  \\
+   -2h^4 & -h^4 & 0 & h^4 & 2h^4
+ \end{pmatrix}
+ \begin{pmatrix}
+   c_{-2} \\ c_{-1} \\ c_0 \\ c_1 \\ c_2
+ \end{pmatrix}
+ &=  
+ \begin{pmatrix}
+   0 \\ 0 \\ 0 \\ 0 \\ 1
+ \end{pmatrix}
+\end{align*}
 
-**4** "modified equation approach..."? Somewhere in notes. Scheme cannot be second order, because 
-linear schemes can't be.
+And obtain:
+
+\begin{align*}
+ \begin{pmatrix}
+   c_{-2} \\ c_{-1} \\ c_0 \\ c_1 \\ c_2
+ \end{pmatrix}
+ &= \frac{1}{24h^4} 
+ \begin{pmatrix}
+   1 \\ -4 \\ 6 \\ -4 \\ 1
+ \end{pmatrix}
+\end{align*}
+
+### Question 1.2.2
+
+\begin{align*}
+  \text{LTE} &= |\hat{u}^{n+1} + u^{n+1} |  \\
+  &= | u_t\Delta t + u_{tt}\frac{\Delta t^2}{2} + O(\Delta t^3) 
+    - \frac{\Delta t}{2\Delta x}(u_{j+1} - u_{j-1}) - \theta \Delta t [ u_{xxxx} + O(\Delta x^2)] | \\
+  &= | u_t\Delta t + u_{tt}\frac{\Delta t^2}{2} + O(\Delta t^3) 
+    - \Delta t [u_t + u_{xx}\Delta x + u_{xxx}\Delta x^2 + u_{xxxx}\Delta x^3 + O(\Delta x^4)] 
+    - \theta \Delta t [ u_{xxxx} + O(\Delta x^2)] | \\
+  &= |  u_{tt}\frac{\Delta t^2}{2} + O(\Delta t^3) 
+    - \Delta t [u_{xx}\Delta x + u_{xxx}\Delta x^2 + u_{xxxx}\Delta x^3 + O(\Delta x^4)] 
+    - \theta \Delta t [ u_{xxxx} + O(\Delta x^2)] |
+\end{align*}
+
+And we choose $\theta$ to match the coefficent of $u_{xxxx}$ from the first derivative stencil,
+so $\theta = -1$. However, this will not do much to change the asymptotic behaviour, since 
+$\Delta x^5$ was pretty darn small already.
+
+### Question 1.2.3
+
+Just a total mess.
+
+
+### Question 1.2.4
+
+Scheme cannot be second order and stable, because linear schemes can't be. (Godunov)
+
+**4** "modified equation approach..."? 
 
 ## Question 1.3
+  
+## Question 1.3.1
 
-**1** Assume periodic conditions. Then, we apply TV norm to $u^n+1_i$, crunch out a nice expression for it.
+Assume periodic conditions. Then, we apply TV norm to $u^n+1_i$, crunch out a nice expression for it.
 Then, summing over all spatial indices, we have glorious cancellation and TVD.
+
+## Question 1.3.2
 
 **2** Follows almost immediately from the linearity of the TV norm.
 
