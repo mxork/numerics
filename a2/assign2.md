@@ -15,11 +15,16 @@ Throughout, we denote $u^{n+k}_{j+i}$ as $u^k_i$, and $u^n_j$ as $u$. Let $\hat{
 
 \begin{align*}
   \text{LTE} &= |\hat{u}^{n+1} + u^{n+1} |  \\
-  &= | u + u_t \Delta t + u_{tt} \frac{\Delta t}{2} + O(\Delta t^3) - [u + \Omega[ (1-\theta)(u_{xx}\Delta x^2 + O(\Delta x^4)) ) + \theta(u^{n+1}_{xx}\Delta x^2 + O(\Delta x^4)) ] ] | \\
-  &= | u_{tt}\frac{\Delta t^2}{2} + O(\Delta t^3) - \Delta t O(\Delta x^2) \text{TODO} \\
-  &= | (1- 2\theta)u_{tt}\frac{\Delta t^2}{2} + O(\Delta t^3) + \Delta t O(\Delta x^2)|
+  &= | u + u_t \Delta t + u_{tt} \frac{\Delta t}{2} + O(\Delta t^3) - [u + \Omega(1-\theta)(u_{xx}\Delta x^2 + O(\Delta x^4)) ) + \Omega \theta (u^{n+1}_{xx}\Delta x^2 + O(\Delta x^4)) ] ] | \\
 \end{align*}
 
+Now we apply $u_t = u_xx$, and Taylor expand the $u^{n+1}_xx$ with respect to time, to obtain:
+
+\begin{align*}
+  &= | (1- 2\theta)u_{tt}\frac{\Delta t^2}{2} + O(\Delta t^3) + O(\Delta t \Delta x^2)|
+\end{align*}
+
+Where we have folded some $\theta$ into the big-$O$ terms.
 
 ### Question 1.1.2
 
@@ -41,29 +46,33 @@ in terms of $\theta$, $\Delta x$, $\Delta t$.
 
 ### Question 1.1.3 
 
-Picking $\theta=\frac{1}{2}$ is obvious: it gets us $max(O(\Delta t^3), \Delta t O(\Delta x^2))$ accuracy for no extra cost compared to any $\theta$ value not equal to 0.
+Picking $\theta=\frac{1}{2}$ is obvious: it gets us $max(O(\Delta t^3), \Delta t O(\Delta x^2))$ accuracy for no extra cost compared to any $\theta$ value not equal to 0. We are also guaranteed
+stability.
 
 Now, considering the balance of $\Delta t$ and $\Delta x$, we derive an expression for the product of 
 computer runtime, $C = \Delta t \Delta x$, and global error, $E = \frac{\text{LTE}}{\Delta t}$, which seems to be as good a metric as any.
 
 \begin{align*}
-CE &= (\Delta x \Delta t)\frac{\Delta t^3 + \Delta t \Delta x^2}{\Delta t} \\
-&= \Delta x(\Delta t^3 + \Delta t \Delta x^2) \\
-& = \Delta x \Delta t^3 + \Delta t \Delta x^3
+  CE &= (\Delta x \Delta t)\frac{\Delta t^3 + \Delta t \Delta x^2}{\Delta t} \\
+      &= \Delta x(\Delta t^3 + \Delta t \Delta x^2) \\
+      & = \Delta x \Delta t^3 + \Delta t \Delta x^3
 \end{align*}
 
 We wind up with $\theta=\frac{1}{2}$, and $\Delta t = (\Delta x)^2$
 
 ### Question 1.1.4
 
-Let $f(x,t) = \sin{x}$. <!--TODO is contant wrt t a cop out? --> Then, taking
+Let $f(x,t) = \sin{x}$. <!-- TODO is contant wrt t a cop out? --> Then, taking
 the Fourier series of both sides gets us:
 
 <!-- TODO double check exact solution -->
+
 \begin{align*}
-d_t\hat{u}_n &= -n^2\hat{u}_n + \mathbb{1}_{n=1} \\
-d_t\hat{u}_n &= -n^2\hat{u}_n + \mathbb{1}_{n=1} 
+  d_t\hat{u}_n &= -n^2\hat{u}_n + \bf{1}_{n=1} \\
+  d_t\hat{u}_n &= -n^2\hat{u}_n + \bf{1}_{n=1} 
 \end{align*}
+
+<!-- TODO efficency plot -->
 
 So, assuming that $u_0 = 0$, we run the scheme to $t=1$. We wind up with a plot
 of our "efficiency surface", (efficiency $= (CE)^{-1}$ ).
@@ -125,47 +134,87 @@ $\Delta x^5$ was pretty darn small already.
 
 ### Question 1.2.3
 
-Just a total mess.
+<!-- TODO stability -->
+
+\begin{align*}
+  G-1 &=  \\
+\end{align*}
 
 
 ### Question 1.2.4
 
 Scheme cannot be second order and stable, because linear schemes can't be. (Godunov)
 
-**4** "modified equation approach..."? 
+<!-- TODO modified equation approach? -->
+
 
 ## Question 1.3
   
 ## Question 1.3.1
 
-Assume periodic conditions. Then, we apply TV norm to $u^n+1_i$, crunch out a nice expression for it.
-Then, summing over all spatial indices, we have glorious cancellation and TVD.
+Assume periodic conditions. Derive a nice expression for $u^{n+1}_{j+1} - u^{n+1}$.
+Then, summing over all spatial indices, we have glorious cancellation and TVD. 
+
+We use the same index convention as the first question: 
+we denote $u^{n+k}_{j+i}$ as $u^k_i$, and $u^n_j$ as $u$.
+
+Begin by rearranging the scheme:
+
+\begin{align*}
+  u^{n+1} &= u + D^-(u_{j-1}-u) + D^+(u_{j+1} - u) \\
+\end{align*}
+
+Where we have defined $D^i \equiv \Delta t C^i$.
+
+Now, consider $u^{n+1}_{j+1} - u^{n+1}$
+
+\begin{align*}
+  u^{n+1}_{j+1} - u^{n+1} &=  u_{j+1} + D^-(u_{j}-u_{j+1}) + D^+(u_{j+2} - u_{j+1}) - [u + D^-(u_{j-1}-u) + D^+(u_{j+1} - u)] \\
+                          &=  (1-D^- - D^+)(u_{j+1} - u) + D^+(u_{j+2} - u_{j+1}) +D^-(u - u_{j-1}) \\
+|u^{n+1}_{j+1} - u^{n+1}| &\leq (1-D^- - D^+)|u_{j+1} - u| + D^+|u_{j+2} - u_{j+1}| +D^-|u - u_{j-1}| 
+\end{align*}
+
+If we now sum over all $j$, the $D$ terms cancel with the preceding and proceding terms, leaving the inequality:
+
+\begin{align*}
+ \sum_j |u^{n+1}_{j+1} - u^{n+1}| &  \leq \sum_j |u_{j+1} - u|
+\end{align*}
+
 
 ## Question 1.3.2
 
-**2** Follows almost immediately from the linearity of the TV norm.
+This follows almost immediately from the linearity of the TV norm. We consider
+the case of only two terms; the extension is easy. Let $v^{n+1} \equiv C^-(u_{j-1}-u) + C^+(u_{j+1}-u)$
+$w^{n+1} \equiv D^-(u_{j-1}-u) + D^+(u_{j+1}-u)$, $u = \theta v + (1 - \theta) w$.
 
-**3** Is it a convex combination of Euler steps? Yes. So, yes.
+\begin{align*}
+  TV(u^{n+1}) &= \theta TV(v^{n+1}) + (1 - \theta)TV(w^{n+1}) \\
+  TV(u^{n+1}) &\leq \theta \max{TV(v^{n+1}), TV(w^{n+1})} + (1 - \theta)\max{TV(v^{n+1}), TV(w^{n+1})} \\
+  TV(u^{n+1}) &\leq \max{TV(v^{n+1}), TV(w^{n+1})}  \\
+  TV(u^{n+1}) &\leq TV(u)
+\end{align*}
 
-**4** TODO
+## Question 1.3.3
+
+Is it a convex combination of Euler steps? Yes. So, yes.
 
 # Question 2
 
 ## Question 2.1
 
-**1** Let $u=sin(x)$ and $f=...TODO$.
+Let $u=\sin{x}$. Then, $f(x)=\cos{2x}-2\sin{x}$.
 
-Does $sin(x)$ count as trivial? Maybe. Regardles, the error is nearly 0 from the get go, since
+Does $sin(x)$ count as trivial? Maybe. Regardless, the error is nearly 0 from the get go, since
 a sine wave is well-represented by a truncated Fourier series.
 
 ![Question 2.1, $L^\infty$ error vs. h](question21errorVh.png)
 
 ## Question 2.2
 
-Gibbs phenomenon.
+Gibbs phenomenon: the $L^\infty$ error approaches a finite, non-zero amount when attempting
+to represent an discontinous function with a truncated Fourier series.
 
 ![Question 2.2  $L^\infty$ error vs. h](question22errorVh.png)
-
 
 # Question 3
 
@@ -183,3 +232,4 @@ Damned if I know. been bashing my head against this one for a while.
 
 ## Question 3.3
 
+Similarly.

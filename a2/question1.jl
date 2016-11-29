@@ -2,10 +2,27 @@ using PyPlot
 
 # question 1.1.4; little miffed.
 function question11()
+    Xs = [2.0^p for p in -7:-2]
+    Ts = [2.0^p for p in -7:-2]
+    Ths = [x for x in (0:4)/4.0]
 
+    timer = function (dx, dt)
+        tic();
+        err = q11error(dx,dt,1/2)
+        t = toc()
+        return err*t
+    end
+
+    EffErr = reshape( pmap( tuple -> timer(tuple...), [ (dx, dt) for dx in Xs, dt in Ts]), size(Xs * Ts') )
+
+    clf()
+    contourf( log.([dx for dx in Xs, dt in Ts]), log.([dt for dx in Xs, dt in Ts]), log.(EffErr))
+    xlabel("log delta-x")
+    ylabel("log delta-t")
 end
 
-function gcn(u, dx, dt, theta)
+
+@everywhere function gcn(u, dx, dt, theta)
     # V = u^n+1
     # Av = Bu
     omega = dt/(dx^2)
@@ -43,7 +60,7 @@ function gcn(u, dx, dt, theta)
     v = A\(B*u)
 end
 
-function q11error(Δx,Δt,θ)
+@everywhere function q11error(Δx,Δt,θ)
     N = round(Int, 1/Δt)
     M = round(Int, 2*pi/Δx)
     Ω = Δt / (Δx)^2
@@ -57,8 +74,10 @@ function q11error(Δx,Δt,θ)
     u = u0
 
     for i = 1:N
-        u = gnc(u, Δx,Δt,θ)
+        u = gcn(u,Δx,Δt,θ)
     end
+
+    Ans = u
 
     return maximum( abs(Ans - Ex) )
 end
